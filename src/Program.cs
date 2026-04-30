@@ -9,6 +9,9 @@ app.Configure(config =>
 
     config.AddCommand<ProfileCommand>("profile")
         .WithDescription("Fetch a LinkedIn profile and output as YAML");
+
+    config.AddCommand<PostCommand>("post")
+        .WithDescription("Fetch LinkedIn posts and output as YAML");
 });
 
 return app.Run(args);

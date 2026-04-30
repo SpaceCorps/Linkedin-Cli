@@ -6,27 +6,43 @@ using Spectre.Console.Cli;
 
 namespace Linkedin.Console.Commands;
 
-public sealed class ProfileCommand : AsyncCommand<ProfileCommand.Settings>
+public sealed class PostCommand : AsyncCommand<PostCommand.Settings>
 {
     public sealed class Settings : GlobalSettings
     {
         [CommandArgument(0, "<URL>")]
-        [Description("LinkedIn profile URL (e.g. https://www.linkedin.com/in/username)")]
+        [Description("LinkedIn URL — post, profile, company, or search URL")]
         public required string Url { get; init; }
 
+        [CommandOption("--limit <N>")]
+        [Description("Max posts per source URL (default: unlimited)")]
+        public int? Limit { get; init; }
+
+        [CommandOption("--since <DATE>")]
+        [Description("Only include posts newer than this date (e.g. 2025-01-01)")]
+        public string? Since { get; init; }
+
+        [CommandOption("--no-deep")]
+        [Description("Skip additional info (likes, comments, etc.)")]
+        public bool NoDeep { get; init; }
+
+        [CommandOption("--raw")]
+        [Description("Return raw unprocessed data from the scraper")]
+        public bool Raw { get; init; }
+
         [CommandOption("--include <SECTIONS>")]
-        [Description("Comma-separated sections to include (e.g. experiences,skills,educations)")]
+        [Description("Comma-separated fields to include in output")]
         public string? Include { get; init; }
     }
 
     protected override async Task<int> ExecuteAsync(CommandContext context, Settings settings, CancellationToken cancellation)
     {
-        var normalizedUrl = LinkedInUrl.NormalizeProfile(settings.Url);
+        var url = LinkedInUrl.NormalizePost(settings.Url);
 
-        AnsiConsole.MarkupLine($"[grey]Fetching profile (this may take 30–60s)...[/]");
+        AnsiConsole.MarkupLine($"[grey]Fetching posts (this may take 30–60s)...[/]");
 
         using var client = settings.CreateClient();
-        var doc = await client.FetchProfileAsync(normalizedUrl);
+        var doc = await client.FetchPostsAsync(url, settings.Limit, settings.Since, !settings.NoDeep, settings.Raw);
 
         HashSet<string>? includeFields = null;
         if (!string.IsNullOrWhiteSpace(settings.Include))
