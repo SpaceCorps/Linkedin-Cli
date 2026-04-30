@@ -11,7 +11,7 @@
 
     <!-- NuGet metadata -->
     <PackageId>Linkedin.Console</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>nielsbosma</Authors>
     <Description>CLI for fetching LinkedIn profiles via Apify — YAML-first output optimized for LLM agent consumption.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

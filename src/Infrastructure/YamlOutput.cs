@@ -45,11 +45,9 @@ public static class YamlOutput
 
     private static readonly HashSet<string> OptionalFields = new(StringComparer.OrdinalIgnoreCase)
     {
-        "experiences", "updates", "profilePicAllDimensions", "skills", "educations",
-        "licenseAndCertificates", "honorsAndAwards", "languages", "volunteerAndAwards",
-        "verifications", "promos", "highlights", "projects", "publications", "patents",
-        "courses", "testScores", "organizations", "volunteerCauses", "interests",
-        "recommendations"
+        "experience", "education", "skills", "certifications", "projects",
+        "volunteering", "publications", "courses", "honorsAndAwards", "languages",
+        "causes", "featured", "receivedRecommendations", "moreProfiles"
     };
 
     private static void FilterProfileFields(object? data, HashSet<string> includeFields)

@@ -27,8 +27,8 @@ public sealed class ApifyClient : IDisposable
 
     public async Task<JsonDocument> FetchProfileAsync(string profileUrl)
     {
-        var endpoint = $"acts/dev_fusion~Linkedin-Profile-Scraper/run-sync-get-dataset-items?token={_token}";
-        var body = new { profileUrls = new[] { profileUrl } };
+        var endpoint = $"acts/harvestapi~linkedin-profile-scraper/run-sync-get-dataset-items?token={_token}";
+        var body = new { urls = new[] { profileUrl } };
 
         return await PostAndReadAsync(endpoint, body);
     }

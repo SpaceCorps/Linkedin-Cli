@@ -15,7 +15,7 @@ public sealed class ProfileCommand : AsyncCommand<ProfileCommand.Settings>
         public required string Url { get; init; }
 
         [CommandOption("--include <SECTIONS>")]
-        [Description("Comma-separated sections to include (e.g. experiences,skills,educations)")]
+        [Description("Comma-separated sections to include (e.g. experience,skills,education)")]
         public string? Include { get; init; }
     }
 
