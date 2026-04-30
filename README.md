@@ -10,7 +10,7 @@ dotnet tool install -g Linkedin.Console
 
 ## Prerequisites
 
-Set your Apify API token:
+Get your API token at [Apify](https://www.apify.com?fpr=ual7wl) and set it:
 
 ```bash
 export APIFY_TOKEN=your-token-here
