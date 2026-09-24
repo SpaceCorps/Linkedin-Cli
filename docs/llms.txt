@@ -1,0 +1,68 @@
+# linkedin
+
+> A native Rust CLI for scraping LinkedIn profiles and posts via Apify, designed for LLM agents and terminal automation.
+
+## Quick Reference
+
+- **Binary Name:** `linkedin`
+- **Output:** YAML on stdout by default; pass `--json` for raw JSON.
+- **Errors:** Structured envelope on stderr with numeric exit code.
+- **Authentication:** Apify API token via OS Keystore (`linkedin login`), `APIFY_TOKEN` env var, or `--api-key <key>`.
+- **Full Agent Manual:** Run `linkedin agent-readme [--json]`.
+
+## Core Commands
+
+### Fetch a LinkedIn Profile
+```bash
+# Full profile in YAML
+linkedin profile https://www.linkedin.com/in/username
+
+# Specific sections in JSON
+linkedin profile https://www.linkedin.com/in/username --include experiences,skills,educations --json
+
+# Using named account from keystore
+linkedin profile https://www.linkedin.com/in/username -a work
+```
+
+### Fetch LinkedIn Posts
+```bash
+# From feed update, post, company, or search URL
+linkedin post https://www.linkedin.com/feed/update/urn:li:activity:123456789 --limit 10
+
+# Only newer than date, skipping comments/likes
+linkedin post https://www.linkedin.com/company/apple --since 2025-01-01 --no-deep
+```
+
+### Identity Context
+```bash
+linkedin me [-a <account>]
+```
+
+### Managing Accounts
+```bash
+linkedin login [<name>] [--api-key <key>]
+linkedin accounts add <name> --api-key <key> [--force]
+linkedin accounts list [--check]
+linkedin accounts test <name>
+linkedin accounts remove <name> --yes
+```
+
+## Exit Codes & Errors
+
+| Code | Name | Meaning |
+| :--- | :--- | :--- |
+| `0` | `ok` | Success |
+| `1` | `error` | Unclassified error |
+| `2` | `network` | Network timeout or Apify server error (retry once) |
+| `3` | `auth_required` | Invalid or missing Apify token (surface remediation to human) |
+| `4` | `not_found` | Resource or dataset not found (do not retry) |
+| `5` | `rate_limited` | Apify rate limit exceeded (back off before retrying) |
+| `6` | `invalid_input` | Malformed URL or CLI argument |
+| `7` | `no_account` | Multiple accounts exist; pass `--account <name>` |
+
+## Documentation Links
+
+- Full Specification: https://spacecorps.github.io/Linkedin-Cli/llms-full.txt
+- Authentication: https://spacecorps.github.io/Linkedin-Cli/auth.html
+- Agent Card: https://spacecorps.github.io/Linkedin-Cli/.well-known/agent-card.json
+- AgentSkills: https://spacecorps.github.io/Linkedin-Cli/.well-known/agent-skills/index.json

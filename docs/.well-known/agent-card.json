@@ -1,0 +1,17 @@
+{
+  "name": "LinkedIn CLI Agent",
+  "description": "Agent interface and profile/post scraping tool for LinkedIn via Apify.",
+  "url": "https://spacecorps.github.io/Linkedin-Cli/",
+  "version": "1.0.0",
+  "capabilities": ["profile_scrape", "post_scrape", "identity", "social_media"],
+  "skills": [
+    {
+      "name": "linkedin-cli",
+      "url": "https://spacecorps.github.io/Linkedin-Cli/llms.txt"
+    }
+  ],
+  "contact": {
+    "email": "contact@spacecorps.dev",
+    "url": "https://spacecorps.github.io/Linkedin-Cli/contact.html"
+  }
+}

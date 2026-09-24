@@ -1,0 +1,118 @@
+# LinkedIn CLI — Full LLM Agent Manual & Specification
+
+`linkedin` is a native Rust command-line tool designed for autonomous LLM agents, coding assistants, and automated pipelines to scrape LinkedIn profiles and posts via Apify actors.
+
+## Tenets for Autonomous Agents
+
+1. **Stdout is Exclusively Structured Data:**
+   Stdout contains only valid YAML (default) or JSON (when `--json` is supplied). Progress messages, warnings, and prompts are sent exclusively to stderr when attached to a TTY.
+2. **Deterministic Authentication:**
+   If multiple accounts are configured in the OS keystore, `--account <name>` (short `-a <name>`) is required. When a single account is configured, it is automatically resolved. You may also pass `--api-key <key>` or set `APIFY_TOKEN`.
+3. **Structured Error Envelopes:**
+   Every error writes a JSON/YAML envelope to stderr and exits with a stable numeric code:
+   ```json
+   {
+     "error": "Human readable error description",
+     "code": "auth_required | not_found | rate_limited | invalid_input | no_account | network | error",
+     "detail": "Diagnostic details or upstream HTTP response",
+     "remediation": "A literal shell command that fixes this issue"
+   }
+   ```
+4. **Offline Self-Documentation:**
+   Run `linkedin agent-readme [--json]` at any time to obtain the embedded operating manual and rules without network roundtrips.
+
+---
+
+## Detailed Command Specification
+
+### 1. `linkedin profile <URL>`
+
+Scrapes full profile data for a LinkedIn member.
+
+- **Positional Argument:**
+  - `<URL>`: LinkedIn profile URL. Accepted formats include:
+    - `https://www.linkedin.com/in/username`
+    - `https://linkedin.com/in/username/`
+    - `linkedin.com/in/username?trk=...`
+    Normalized automatically to `https://www.linkedin.com/in/username`.
+- **Options:**
+  - `--include <SECTIONS>`: Comma-separated list of profile sections to retain in the response. All other optional fields are omitted.
+    - Available sections: `experiences`, `skills`, `educations`, `languages`, `licenseAndCertificates`, `honorsAndAwards`, `volunteerAndAwards`, `projects`, `publications`, `patents`, `courses`, `testScores`, `organizations`, `interests`, `recommendations`, `updates`, `profilePicAllDimensions`, `verifications`, `promos`, `highlights`, `volunteerCauses`.
+  - `-a, --account <NAME>`: Name of the configured Apify account in the OS Keystore.
+  - `--api-key <KEY>`: Override Apify API token for this invocation.
+  - `--json`: Output raw JSON instead of YAML.
+
+### 2. `linkedin post <URL>`
+
+Scrapes posts from LinkedIn feeds, profile activities, company pages, or search results.
+
+- **Positional Argument:**
+  - `<URL>`: Must match one of:
+    - Activity / post URL: `https://www.linkedin.com/feed/update/urn:li:activity:...` or `https://www.linkedin.com/posts/...`
+    - Profile activity: `https://www.linkedin.com/in/username`
+    - Company page: `https://www.linkedin.com/company/...`
+    - Search URL: `https://www.linkedin.com/search/...`
+- **Options:**
+  - `--limit <N>`: Maximum number of posts to fetch per source URL.
+  - `--since <DATE>`: Date filter; only return posts newer than this date (e.g. `2025-01-01`).
+  - `--no-deep`: Skip fetching additional engagement details (likes, comments list, author metadata).
+  - `--raw`: Return raw, uncleaned actor output.
+  - `--include <SECTIONS>`: Filter output to specific fields.
+  - `-a, --account <NAME>`: Stored keystore account name.
+  - `--api-key <KEY>`: Override Apify API token.
+  - `--json`: Output raw JSON instead of YAML.
+
+### 3. `linkedin me`
+
+Queries the Apify `users/me` endpoint to verify authentication status and returns the current username, user email, and token validity.
+
+- **Options:**
+  - `-a, --account <NAME>`: Account to probe.
+  - `--api-key <KEY>`: Inline token to probe.
+  - `--json`: Output raw JSON.
+
+### 4. `linkedin login [<NAME>]`
+
+Interactive or scripted login to store an Apify API token into the host's native OS Keystore.
+
+- **Arguments & Options:**
+  - `[<NAME>]`: Name for this account (defaults to `"default"`).
+  - `--api-key <KEY>`: Provide token directly on the command line.
+  - `--api-key-stdin`: Read token from standard input (recommended for scripts and agent loops to keep secrets out of process listings and shell history).
+  - `--force`: Overwrite existing stored token for this account name.
+  - `--no-verify`: Store the token without testing against `users/me`.
+  - `--no-browser`: Do not attempt to launch a web browser to the Apify tokens page.
+
+### 5. `linkedin accounts`
+
+Subcommands to manage stored accounts:
+
+- `linkedin accounts list [--check]`
+  Lists all stored accounts, their recorded username/identity, and keystore backend. With `--check`, makes a live API call for each account in parallel to confirm validity (`valid`, `rejected`, or `unreachable`).
+- `linkedin accounts test <NAME>`
+  Tests a specific account and warns if credentials have drifted.
+- `linkedin accounts remove <NAME> [--yes]`
+  Deletes an account's metadata and removes its secret from the OS Keystore. Requires `--yes` in non-interactive environments.
+
+---
+
+## Environment Variables
+
+- `APIFY_TOKEN`: Fallback API token used when `--api-key` and `-a/--account` are not provided.
+- `LINKEDIN_CONFIG_DIR`: Override path for storing `config.yaml` (default: OS standard config directory).
+- `LINKEDIN_SECRET_STORE`: Force a specific keystore backend: `keychain`, `libsecret`, `dpapi`, or `plaintext`.
+- `LINKEDIN_ALLOW_PLAINTEXT_STORE=1`: Explicit opt-in required when no native OS keystore is present, storing secrets in an owner-restricted (0600) `secrets.json` file.
+- `APIFY_API_URL`: Override base API URL (used for local testing and mocking).
+
+---
+
+## Exit Codes
+
+- `0`: Success (`ok`)
+- `1`: Unclassified Error (`error`)
+- `2`: Network or Upstream Server Error (`network`)
+- `3`: Authentication Required or Invalid Token (`auth_required`)
+- `4`: Resource or Actor Not Found (`not_found`)
+- `5`: Rate Limited by Apify (`rate_limited`)
+- `6`: Invalid Input or Arguments (`invalid_input`)
+- `7`: Account Not Specified or Multiple Accounts Exist (`no_account`)

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication Guide · LinkedIn CLI</title>
+  <meta name="description" content="Authentication methods, credential storage, and error handling for developers and AI agents using LinkedIn CLI.">
+  <link rel="canonical" href="https://spacecorps.github.io/Linkedin-Cli/auth.html">
+  <meta property="og:title" content="Authentication Guide · LinkedIn CLI">
+  <meta property="og:description" content="Authentication methods, credential storage, and error handling for developers and AI agents using LinkedIn CLI.">
+  <meta property="og:url" content="https://spacecorps.github.io/Linkedin-Cli/auth.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://spacecorps.github.io/Linkedin-Cli/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="is-agentic-site-type" content="content">
+  <style>
+    body { background: #090d16; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.7; padding: 40px 20px; }
+    .content-box { max-width: 800px; margin: 0 auto; background: rgba(22, 27, 46, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 40px; }
+    h1 { font-size: 2.2rem; margin-bottom: 20px; color: #fff; }
+    h2 { font-size: 1.4rem; margin-top: 30px; margin-bottom: 12px; color: #38bdf8; }
+    p { margin-bottom: 16px; color: #94a3b8; }
+    code { background: rgba(99, 102, 241, 0.15); color: #38bdf8; padding: 3px 6px; border-radius: 4px; font-family: monospace; }
+    pre { background: #0f172a; padding: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); overflow-x: auto; margin-bottom: 20px; }
+    pre code { background: none; color: #e2e8f0; padding: 0; }
+    a { color: #38bdf8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back { display: inline-block; margin-bottom: 24px; color: #6366f1; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="content-box">
+    <a href="./" class="back">&larr; Back to LinkedIn CLI</a>
+    <h1>Authentication Guide</h1>
+    
+    <p>This document outlines authentication methods, credential storage, and error handling for developers and AI agents using LinkedIn CLI.</p>
+
+    <h2>Overview</h2>
+    <p>LinkedIn CLI interfaces with LinkedIn data via Apify actors. Authentication requires an Apify API token. Tokens can be stored in the host operating system's native keychain or supplied directly via environment variables and standard input.</p>
+
+    <h2>Interactive Browser Login (<code>linkedin login</code>)</h2>
+    <p>The recommended flow for local developer machines:</p>
+    <pre><code>linkedin login [account_name]</code></pre>
+    <p>1. The CLI launches your system browser to <code>https://console.apify.com/account/integrations</code>.<br>
+    2. You copy or generate your personal Apify token.<br>
+    3. Paste the token into the CLI prompt (input characters are masked).<br>
+    4. The CLI validates the key with a live request to <code>GET /v2/users/me</code>.<br>
+    5. Upon confirmation, the key is securely saved to the native OS keyring under the account name (defaults to <code>default</code>).</p>
+
+    <h2>Non-Interactive & Scripted Login</h2>
+    <p>For headless CI/CD environments or autonomous agents:</p>
+    <pre><code>printf %s "$APIFY_TOKEN" | linkedin login [account_name] --api-key-stdin</code></pre>
+    <p>Or pass the token directly as a flag:</p>
+    <pre><code>linkedin login [account_name] --api-key "$APIFY_TOKEN"</code></pre>
+
+    <h2>Multi-Account Management</h2>
+    <pre><code># List accounts and check status against Apify
+linkedin accounts list --check
+
+# Test a specific account
+linkedin accounts test work</code></pre>
+  </div>
+</body>
+</html>

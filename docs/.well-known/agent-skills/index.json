@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "linkedin-cli",
+      "description": "Scrape full LinkedIn profiles, query activity posts, filter sections, and manage Apify credentials via native Rust CLI.",
+      "type": "skill-md",
+      "url": "https://spacecorps.github.io/Linkedin-Cli/llms.txt",
+      "digest": "sha256:155d06b902831dc2d5e5bd3281d8ec8d079e8e6942d8dbebf40c69f0301d7c97"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy · LinkedIn CLI</title>
+  <meta name="description" content="Privacy Policy for LinkedIn CLI: Zero telemetry collection, local credential storage, and direct API communication.">
+  <link rel="canonical" href="https://spacecorps.github.io/Linkedin-Cli/privacy.html">
+  <meta property="og:title" content="Privacy Policy · LinkedIn CLI">
+  <meta property="og:description" content="Privacy Policy for LinkedIn CLI: Zero telemetry collection, local credential storage, and direct API communication.">
+  <meta property="og:url" content="https://spacecorps.github.io/Linkedin-Cli/privacy.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://spacecorps.github.io/Linkedin-Cli/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="is-agentic-site-type" content="content">
+  <style>
+    body { background: #090d16; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.7; padding: 40px 20px; }
+    .content-box { max-width: 800px; margin: 0 auto; background: rgba(22, 27, 46, 0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 40px; }
+    h1 { font-size: 2.2rem; margin-bottom: 20px; color: #fff; }
+    h2 { font-size: 1.4rem; margin-top: 30px; margin-bottom: 12px; color: #38bdf8; }
+    p { margin-bottom: 16px; color: #94a3b8; }
+    a { color: #38bdf8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back { display: inline-block; margin-bottom: 24px; color: #6366f1; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="content-box">
+    <a href="./" class="back">&larr; Back to LinkedIn CLI</a>
+    <h1>Privacy Policy</h1>
+    
+    <p>Last updated: September 2026</p>
+
+    <h2>1. Zero Telemetry & Tracking</h2>
+    <p>LinkedIn CLI collects no analytics, telemetry, diagnostics, or tracking data. When you run <code>linkedin</code>, no network connections are made to SpaceCorps servers or any third-party analytics provider. The CLI communicates exclusively and directly with the Apify REST API to perform the actions you explicitly command.</p>
+
+    <h2>2. Local Credential Storage</h2>
+    <p>Your Apify API tokens are never written to unencrypted disk files by default. The CLI delegates all secret storage to native operating system keystores (macOS Keychain, Linux Secret Service daemon, and Windows Data Protection API / DPAPI). Only non-secret account metadata (such as account label and creation timestamp) is recorded in <code>config.yaml</code>.</p>
+
+    <h2>3. Third-Party Services</h2>
+    <p>Requests made by the CLI are transmitted directly over HTTPS to the Apify platform (<code>https://api.apify.com/v2/</code>). Your interactions with the Apify platform are governed by Apify's respective terms of service and privacy policy.</p>
+
+    <h2>4. Open Source Verification</h2>
+    <p>LinkedIn CLI is 100% open-source software licensed under the MIT License. The complete source code is public and auditable at <a href="https://github.com/SpaceCorps/Linkedin-Cli" target="_blank" rel="noopener">https://github.com/SpaceCorps/Linkedin-Cli</a>.</p>
+  </div>
+</body>
+</html>
